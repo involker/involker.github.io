@@ -1,7 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./css/timeline.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="./js/timeline.min.js"></script>
+    <style>
+        .item{
+            display: flex;
+        }
+        .item-left{
+            width: 378px;
+        }
+        .item-right{
+            flex:1;
+            margin-left:20px;
+        }
+    </style>
+</head>
+
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <div class="timeline-container timeline-theme-1">
+        <div class="timeline js-timeline">
+        </div>
+    </div>
 </body>
+<script>
+    var container = document.querySelector('.js-timeline')
+    $.getJSON('./diary.json',function(data){
+        console.log(data);
+        var content = "";
+        data.forEach(row => {
+            content += `<div data-time="${row.time}" class="item">
+                <img src="${row.avtar}" class="item-left"/>
+                <div class="item-right">${row.text}</div>
+                </div>`
+        });
+        container.innerHTML = content;
+        $('.js-timeline').Timeline();
+    })
+</script>
+
 </html>
