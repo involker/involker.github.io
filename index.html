@@ -7,17 +7,20 @@
     <title>带学生日记</title>
     <link rel="stylesheet" href="./css/timeline.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="./js/timeline.min.js"></script>
     <style>
-        .item{
+        .item {
             display: flex;
         }
-        .item-left{
+
+        .item-left {
             width: 378px;
         }
-        .item-right{
-            flex:1;
-            margin-left:20px;
+
+        .item-right {
+            flex: 1;
+            margin-left: 20px;
         }
     </style>
 </head>
@@ -30,17 +33,20 @@
 </body>
 <script>
     var container = document.querySelector('.js-timeline')
-    $.getJSON('./diary.json',function(data){
-        console.log(data);
+    $.getJSON('./diary.json', function (data) {
         var content = "";
+        var count = 0;
         data.forEach(row => {
-            content += `<div data-time="${row.time}" class="item">
-                <img src="${row.avtar}" class="item-left"/>
-                <div class="item-right">${row.text}</div>
-                </div>`
+            $.get(row.file, function (md) {
+                const mdHtml = marked(md);
+                content += `<div data-time="${row.time}" class="item">${mdHtml}</div>`
+                count++;
+                if (count === data.length) {
+                    container.innerHTML = content;
+                    $('.js-timeline').Timeline();
+                }
+            })
         });
-        container.innerHTML = content;
-        $('.js-timeline').Timeline();
     })
 </script>
 
